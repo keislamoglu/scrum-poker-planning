@@ -3,4 +3,5 @@ export interface Story {
   title: string;
   description: string;
   sessionId: string;
+  vote: number;
 }
