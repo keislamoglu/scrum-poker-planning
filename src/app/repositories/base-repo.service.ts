@@ -12,5 +12,5 @@ import {RepositoriesModule} from './repositories.module';
  * where `Session` is the entity type, `SessionRepoService` is the repository service for `Session`.
  */
 @Injectable({providedIn: RepositoriesModule})
-export class BaseRepoService<T> {
+export abstract class BaseRepoService<T extends {id: string}> {
 }
