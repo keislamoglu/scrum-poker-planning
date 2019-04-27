@@ -1,0 +1,13 @@
+<label>Story List</label>
+<table>
+  <tr>
+    <th>Story</th>
+    <th>Story Point</th>
+    <th>Status</th>
+  </tr>
+  <tr *ngFor="let story of storyList">
+    <td>{{story.title}}</td>
+    <td>{{story.point || ''}}</td>
+    <td>{{getStatus(story)}}</td>
+  </tr>
+</table>
