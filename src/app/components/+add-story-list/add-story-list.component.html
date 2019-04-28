@@ -1,0 +1,10 @@
+<div>
+  <label>Session Name <input type="text" placeholder="e.g. Sprint Planning 1" [(ngModel)]="session.name"></label>
+  <label>Number of Voters <input type="number" min="1" placeholder="e.g. 5" [(ngModel)]="session.numberOfVoters"></label>
+</div>
+<div>
+  <app-story-textarea></app-story-textarea>
+</div>
+<div>
+  <button>Start Session</button>
+</div>

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Story} from '../../entities';
 
 @Component({
+  selector: 'app-story-textarea',
   templateUrl: './story-textarea.component.html',
   styleUrls: ['./story-textarea.component.scss']
 })
