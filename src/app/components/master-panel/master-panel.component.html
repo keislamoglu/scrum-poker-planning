@@ -1,0 +1,6 @@
+<p *ngIf="story">{{story.title}} is active</p>
+
+<div *ngIf="story && allVoted">
+  <label for="final-score">Final Score</label>
+  <input id="final-score" type="text" [(ngModel)]="story.point">
+</div>
