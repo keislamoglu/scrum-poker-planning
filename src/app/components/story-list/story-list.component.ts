@@ -3,6 +3,7 @@ import {Story} from '../../entities';
 import {StoryRepoService} from '../../repositories';
 
 @Component({
+  selector: 'app-story-list',
   templateUrl: './story-list.component.html',
   styleUrls: ['./story-list.component.scss']
 })

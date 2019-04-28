@@ -25,8 +25,8 @@ describe('StoryListComponent', () => {
 
   beforeEach(() => {
     storyList = [
-      {id: 'story-1', title: 'Story 1', point: 5, sessionId: 'session-1'},
-      {id: 'story-2', title: 'Story 2', point: 13, sessionId: 'session-1'},
+      {id: 'story-1', title: 'Story 1', point: '5', sessionId: 'session-1'},
+      {id: 'story-2', title: 'Story 2', point: '13', sessionId: 'session-1'},
       {id: 'story-3', title: 'Story 3', point: void 0, sessionId: 'session-1'},
       {id: 'story-4', title: 'Story 4', point: void 0, sessionId: 'session-1'}
     ];
@@ -78,7 +78,7 @@ describe('StoryListComponent', () => {
 
     it('should trigger when active story changed', () => {
       const activeStoryId = component.activeStoryId;
-      storyList[2].point = 13;
+      storyList[2].point = '13';
 
       jasmine.clock().tick(2001);
 
@@ -88,8 +88,8 @@ describe('StoryListComponent', () => {
 
     it('should trigger with null when stories ended', () => {
       spyOn(component.storyChange, 'emit');
-      storyList[2].point = 13;
-      storyList[3].point = 50;
+      storyList[2].point = '13';
+      storyList[3].point = '50';
 
       jasmine.clock().tick(2001);
 
