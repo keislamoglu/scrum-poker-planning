@@ -6,7 +6,6 @@ describe('SessionService', () => {
   let service: SessionService;
   const testingSession: Session = {
     id: 'session-1',
-    slug: 'session-1',
     name: 'Session 1',
     numberOfVoters: 5,
     activeStoryId: void 0

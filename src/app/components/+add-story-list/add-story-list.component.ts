@@ -9,7 +9,6 @@ import {SessionRepoService} from '../../repositories';
 export class AddStoryListComponent {
   session: Session = {
     id: void 0,
-    slug: void 0,
     numberOfVoters: void 0,
     activeStoryId: void 0,
     name: '',
@@ -47,6 +46,7 @@ export class AddStoryListComponent {
     if (isValid) {
       this.sessionRepoService.add(this.session).subscribe(session => {
         // TODO: redirect to view-master
+        alert('created');
       });
     }
   }

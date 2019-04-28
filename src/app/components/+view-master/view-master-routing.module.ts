@@ -3,7 +3,7 @@ import {Route, RouterModule} from '@angular/router';
 import {ViewMasterComponent} from './view-master.component';
 
 const routes: Route[] = [
-  {path: 'view-master/:sessionSlug', component: ViewMasterComponent}
+  {path: 'view-master/:sessionId', component: ViewMasterComponent}
 ];
 
 @NgModule({

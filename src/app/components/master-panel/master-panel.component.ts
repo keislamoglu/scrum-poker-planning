@@ -43,7 +43,7 @@ export class MasterPanelComponent implements OnInit, OnDestroy {
   }
 
   loadVotes() {
-    this.voteRepoService.getBySession(this.sessionId).subscribe(votes => {
+    this.voteRepoService.getByStory(this.story.id).subscribe(votes => {
       this.votes.map(vote => {
         vote.vote = votes.find(v => v.voterId === vote.voter.id);
         return vote;

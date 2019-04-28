@@ -9,6 +9,6 @@ export class VoterRepoService extends BaseRepoService<Voter> {
   protected repoAPIPath = '/voter';
 
   getBySession(sessionId: string): Observable<Voter[]> {
-    return this.httpClient.get<Voter[]>(this.apiURL(`by-session/${sessionId}`));
+    return this.httpClient.get<Voter[]>(this.apiURL(`/by-session/${sessionId}`));
   }
 }

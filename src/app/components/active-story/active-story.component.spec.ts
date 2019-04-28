@@ -4,6 +4,7 @@ import {Story} from '../../entities';
 import {StoryRepoService, VoteRepoService} from '../../repositories';
 import {of} from 'rxjs';
 import {VoterService} from '../../services';
+import {CommonModule} from '@angular/common';
 
 describe('ActiveStoryComponent', () => {
   let fixture: ComponentFixture<ActiveStoryComponent>;
@@ -28,6 +29,7 @@ describe('ActiveStoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [CommonModule],
       declarations: [ActiveStoryComponent],
       providers: [
         {provide: StoryRepoService, useValue: testingStoryRepoService},

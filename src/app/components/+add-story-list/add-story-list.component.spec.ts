@@ -13,7 +13,7 @@ describe('AddStoryListComponent', () => {
 
   const sessionRepoService = {
     add: jasmine.createSpy('add').and.callFake((session: Session): Observable<Session> => {
-      session.slug = session.id = 'session-1';
+      session.id = 'session-1';
       return of(session);
     })
   };
