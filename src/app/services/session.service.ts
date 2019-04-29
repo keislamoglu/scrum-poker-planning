@@ -4,7 +4,7 @@ import {SessionRepoService} from '../repositories';
 import {Observable} from 'rxjs';
 import {Session} from '../entities';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class SessionService {
   constructor(private route: ActivatedRoute,
               private sessionRepoService: SessionRepoService) {

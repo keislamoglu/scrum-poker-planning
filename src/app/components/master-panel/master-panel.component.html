@@ -1,6 +1,15 @@
-<p *ngIf="story">{{story.title}} is active</p>
-
+<span *ngIf="story">{{story.title}} is active</span>
+<div *ngFor="let voter of voters">
+  {{voter.nick}} : {{getVote(voter.id)}}
+</div>
+<p *ngIf="session && session.numberOfVoters > voters.length">
+  <i>waiting for other voters</i>
+</p>
 <div *ngIf="story && allVoted">
   <label for="final-score">Final Score</label>
   <input id="final-score" type="text" [(ngModel)]="story.point">
+</div>
+
+<div *ngIf="story">
+  <button [disabled]="!allVoted" (click)="endVoting()">End voting for {{story.title}}</button>
 </div>

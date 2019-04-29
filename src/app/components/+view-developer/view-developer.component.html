@@ -1,0 +1,5 @@
+<app-story-list [sessionId]="sessionId" (storyChange)="onStoryChange($event)"></app-story-list>
+<app-active-story #activeStory *ngIf="!ended"></app-active-story>
+<p>
+  <i *ngIf="ended">Voting Finished</i>
+</p>

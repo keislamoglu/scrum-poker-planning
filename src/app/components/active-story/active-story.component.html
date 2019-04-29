@@ -1,3 +1,5 @@
-<label *ngIf="story">{{story.title}}</label>
-<button *ngFor="let point of points" (click)="sendVote(point)">{{point}}</button>
+<div><label *ngIf="story">{{story.title}}</label></div>
+<br>
+<div><button *ngFor="let point of points" (click)="sendVote(point)">{{point}}</button></div>
+<br>
 <span *ngIf="point != null">{{point}} Voted</span>

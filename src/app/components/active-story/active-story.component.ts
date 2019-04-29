@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Story} from '../../entities';
 import {StoryRepoService, VoteRepoService} from '../../repositories';
 import {VoterService} from '../../services';
@@ -8,10 +8,11 @@ import {map, switchMap} from 'rxjs/operators';
 @Component({
   selector: 'app-active-story',
   templateUrl: './active-story.component.html',
-  styleUrls: ['./active-story.component.scss']
+  styleUrls: ['./active-story.component.scss'],
+  providers: [VoterService]
 })
-export class ActiveStoryComponent implements OnInit {
-  @Input() storyId: string;
+export class ActiveStoryComponent {
+  storyId: string;
   story: Story;
   points = APP_CONFIG.points;
   point: string;
@@ -21,13 +22,17 @@ export class ActiveStoryComponent implements OnInit {
               private voterService: VoterService) {
   }
 
-  ngOnInit(): void {
+  loadStory(storyId: string) {
+    this.storyId = storyId;
     this.storyRepoService.get(this.storyId).subscribe(story => {
       this.story = story;
     });
   }
 
   sendVote(point: string) {
+    if (!this.storyId) {
+      return;
+    }
     const voter = this.voterService.voter;
     // check whether there is a vote already
     // if no, create a new one,
@@ -35,7 +40,7 @@ export class ActiveStoryComponent implements OnInit {
     this.voteRepoService.getByCriteria({storyId: this.storyId, voterId: voter.id}).pipe(
       switchMap(vote => {
           return vote
-            ? this.voteRepoService.update(vote.id, vote)
+            ? this.voteRepoService.update(vote.id, {...vote, point})
             : this.voteRepoService.add({voterId: voter.id, point, storyId: this.storyId})
               .pipe(map(() => void 0));
         }

@@ -5,7 +5,7 @@ import {SessionService} from './session.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class VoterService {
   private _voter: Voter | null;
 
@@ -20,9 +20,7 @@ export class VoterService {
               private sessionService: SessionService) {
   }
 
-  createVoter(nick: string, type: 'dev' | 'master'): Observable<Voter> {
-    const sessionId = this.sessionService.getSessionId();
-
+  createVoter(nick: string, type: 'dev' | 'master', sessionId: string): Observable<Voter> {
     return this.voterRepoService.add({nick, type, sessionId}).pipe(
       map(voter => {
         this._setVoter(voter);
@@ -33,11 +31,10 @@ export class VoterService {
 
   private _setVoter(voter: Voter) {
     this._voter = voter;
-    this._saveToLocalStorage();
+    this._saveToLocalStorage(voter.sessionId);
   }
 
-  private _saveToLocalStorage() {
-    const sessionId = this.sessionService.getSessionId();
+  private _saveToLocalStorage(sessionId: string) {
     localStorage.setItem(`voter_${sessionId}`, JSON.stringify(this.voter));
   }
 

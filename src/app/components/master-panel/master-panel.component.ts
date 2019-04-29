@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Story, Vote, Voter} from '../../entities';
+import {Session, Story, Vote, Voter} from '../../entities';
 import {StoryRepoService, VoteRepoService, VoterRepoService} from '../../repositories';
 import {SessionService} from '../../services';
+import {zip} from 'rxjs';
 
 @Component({
   selector: 'app-master-panel',
@@ -9,8 +10,10 @@ import {SessionService} from '../../services';
   styleUrls: ['./master-panel.component.scss']
 })
 export class MasterPanelComponent implements OnInit, OnDestroy {
-  votes: { vote: Vote, voter: Voter }[] = [];
+  voters: Voter[] = [];
+  votes: Vote[] = [];
   story: Story | null = null;
+  session: Session;
   sessionId;
   allVoted = false;
   timer: number;
@@ -23,7 +26,10 @@ export class MasterPanelComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sessionId = this.sessionService.getSessionId();
-    this.timer = setInterval(() => this.loadVotes(), 2000);
+    this.sessionService.getSession().subscribe(session => {
+      this.session = session;
+      this.timer = setInterval(() => this.loadVotes(), 2000);
+    });
   }
 
   ngOnDestroy(): void {
@@ -31,30 +37,36 @@ export class MasterPanelComponent implements OnInit, OnDestroy {
   }
 
   loadStory(storyId: string) {
-    this.allVoted = false;
-    this.story = null;
-    this.storyRepoService.get(storyId).subscribe(story => this.story = story);
-  }
-
-  loadVoters() {
-    this.voterRepoService.getBySession(this.sessionId).subscribe(voters => {
-      this.votes = voters.map(voter => ({vote: void 0, voter}));
+    this.storyRepoService.get(storyId).subscribe(story => {
+      if (this.story == null || (this.story && this.story.id !== story.id)) {
+        this.allVoted = false;
+        this.story = story;
+      }
     });
   }
 
   loadVotes() {
-    this.voteRepoService.getByStory(this.story.id).subscribe(votes => {
-      this.votes.map(vote => {
-        vote.vote = votes.find(v => v.voterId === vote.voter.id);
-        return vote;
-      });
-      if (this.votes.every(v => v.vote !== undefined)) {
+    if (this.allVoted || !this.story) {
+      return;
+    }
+    zip(
+      this.voteRepoService.getByStory(this.story.id),
+      this.voterRepoService.getBySession(this.sessionId)
+    ).subscribe(([votes, voters]) => {
+      this.votes = votes;
+      this.voters = voters;
+      if (this.votes.length === this.session.numberOfVoters) {
         this.allVoted = true;
       }
     });
   }
 
-  setStoryPoint() {
+  getVote(voterId: string) {
+    const vote = this.votes.find(t => t.voterId === voterId);
+    return vote ? this.allVoted ? vote.point : 'Voted' : 'Not Voted';
+  }
+
+  endVoting() {
     if (this.story != null && this.allVoted) {
       this.storyRepoService.update(this.story.id, this.story).subscribe();
     }

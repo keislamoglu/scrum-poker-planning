@@ -31,7 +31,7 @@ export class StoryListComponent implements OnInit, OnDestroy {
   loadList() {
     this.storyRepoService.getBySession(this.sessionId).subscribe(storyList => {
       this.storyList = storyList;
-      const notVotedStoryList = storyList.filter(t => t.point === undefined);
+      const notVotedStoryList = storyList.filter(t => t.point == null);
       if (notVotedStoryList.length > 0) {
         this.activeStoryId = notVotedStoryList[0].id;
         this.storyChange.emit(this.activeStoryId);
@@ -45,6 +45,6 @@ export class StoryListComponent implements OnInit, OnDestroy {
     if (story.id === this.activeStoryId) {
       return 'Active';
     }
-    return story.point === undefined ? 'Not Voted' : 'Voted';
+    return story.point ? 'Voted' : 'Not Voted';
   }
 }

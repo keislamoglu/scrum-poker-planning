@@ -1,3 +1,9 @@
-<app-story-list [sessionId]="sessionId" #storyList></app-story-list>
-<app-active-story [storyId]="activeStoryId"></app-active-story>
-<app-master-panel></app-master-panel>
+<div>
+  {{viewDevUrl}}
+</div>
+<app-story-list [sessionId]="sessionId" (storyChange)="onStoryChange($event)"></app-story-list>
+<app-active-story #activeStory *ngIf="!ended"></app-active-story>
+<app-master-panel #masterPanel *ngIf="!ended"></app-master-panel>
+<p>
+  <i *ngIf="ended">Voting Finished</i>
+</p>

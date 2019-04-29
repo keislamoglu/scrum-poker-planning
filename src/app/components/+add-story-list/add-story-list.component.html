@@ -3,7 +3,10 @@
   <label>Number of Voters <input type="number" min="1" placeholder="e.g. 5" [(ngModel)]="session.numberOfVoters"></label>
 </div>
 <div>
-  <app-story-textarea></app-story-textarea>
+  <app-story-textarea #textarea></app-story-textarea>
+</div>
+<div>
+  <label>Nick <input type="text" [(ngModel)]="nick" placeholder="e.g. Kadir"></label>
 </div>
 <div>
   <button (click)="startSession()">Start Session</button>
