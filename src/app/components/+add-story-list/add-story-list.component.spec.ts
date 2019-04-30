@@ -1,21 +1,34 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {AddStoryListComponent} from './add-story-list.component';
 import {Component} from '@angular/core';
-import {SessionRepoService} from '../../repositories';
-import {Session} from '../../entities';
+import {SessionRepoService, StoryRepoService} from '../../repositories';
+import {Session, Story} from '../../entities';
 import {Observable, of} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormsModule} from '@angular/forms';
+import {VoterService} from '../../services';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AddStoryListComponent', () => {
   let fixture: ComponentFixture<AddStoryListComponent>;
   let component: AddStoryListComponent;
 
-  const sessionRepoService = {
-    add: jasmine.createSpy('add').and.callFake((session: Session): Observable<Session> => {
+  const testingStoryList: Story[] = [
+    {id: void 0, title: 'Story 1', sessionId: void 0},
+    {id: void 0, title: 'Story 2', sessionId: void 0},
+    {id: void 0, title: 'Story 3', sessionId: void 0},
+  ];
+  const testingSessionRepoService = {
+    add: jasmine.createSpy('sessionRepoAdd').and.callFake((session: Session): Observable<Session> => {
       session.id = 'session-1';
       return of(session);
     })
+  };
+  const testingVoterService = {
+    createVoter: jasmine.createSpy('voterServiceCreateVoter').and.returnValue(of(void 0))
+  };
+  const testingStoryRepoService = {
+    add: jasmine.createSpy('storyRepoAdd').and.returnValue(of(void 0))
   };
 
   @Component({
@@ -27,14 +40,23 @@ describe('AddStoryListComponent', () => {
   }
 
   beforeEach(async(() => {
+    TestBed.overrideComponent(AddStoryListComponent, {
+      set: {
+        providers: [
+          {provide: VoterService, useValue: testingVoterService},
+        ]
+      }
+    });
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule
       ],
       declarations: [AddStoryListComponent, TestingStoryTextareaComponent],
       providers: [
-        {provide: SessionRepoService, useValue: sessionRepoService}
+        {provide: SessionRepoService, useValue: testingSessionRepoService},
+        {provide: StoryRepoService, useValue: testingStoryRepoService},
       ]
     }).compileComponents();
   }));
@@ -42,9 +64,14 @@ describe('AddStoryListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddStoryListComponent);
     component = fixture.componentInstance;
+    component.textareaComponent = {
+      getStoryList(): Story[] {
+        return testingStoryList;
+      }
+    } as any;
   });
 
-  afterEach(() => sessionRepoService.add.calls.reset());
+  afterEach(() => testingSessionRepoService.add.calls.reset());
 
   it('should be created', () => {
     fixture.detectChanges();
@@ -92,7 +119,7 @@ describe('AddStoryListComponent', () => {
     component.startSession();
     expect(component.validateSessionName).toHaveBeenCalled();
     expect(component.validateNumberOfVoters).toHaveBeenCalled();
-    expect(sessionRepoService.add).toHaveBeenCalledWith(component.session);
+    expect(testingSessionRepoService.add).toHaveBeenCalledWith(component.session);
   });
 
   it('should not create the session when values are not valid', () => {
@@ -101,6 +128,6 @@ describe('AddStoryListComponent', () => {
     component.startSession();
     expect(component.validateSessionName()).toBe(false);
     expect(component.validateNumberOfVoters()).toBe(false);
-    expect(sessionRepoService.add).not.toHaveBeenCalled();
+    expect(testingSessionRepoService.add).not.toHaveBeenCalled();
   });
 });

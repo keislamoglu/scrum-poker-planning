@@ -28,13 +28,17 @@ describe('ActiveStoryComponent', () => {
   };
 
   beforeEach(async(() => {
+    TestBed.overrideComponent(ActiveStoryComponent, {
+      set: {
+        providers: [{provide: VoterService, useValue: testingVoterService}]
+      }
+    });
     TestBed.configureTestingModule({
       imports: [CommonModule],
       declarations: [ActiveStoryComponent],
       providers: [
         {provide: StoryRepoService, useValue: testingStoryRepoService},
         {provide: VoteRepoService, useValue: testingVoteRepoService},
-        {provide: VoterService, useValue: testingVoterService},
       ]
     }).compileComponents();
   }));
@@ -53,9 +57,8 @@ describe('ActiveStoryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load story on init', async () => {
-    component.storyId = 'story-1';
-    fixture.detectChanges();
+  it('should load story', async () => {
+    component.loadStory('story-1');
     await fixture.whenStable();
     expect(component.story).toEqual(testingStoryList[0]);
   });

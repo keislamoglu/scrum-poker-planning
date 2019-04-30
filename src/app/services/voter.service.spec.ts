@@ -30,13 +30,13 @@ describe('VoterService', () => {
       type: 'dev',
       sessionId
     };
-    const voter = await service.createVoter('Nick', 'dev').toPromise();
+    const voter = await service.createVoter('Nick', 'dev', sessionId).toPromise();
     expect(voter).toEqual(testingVoter);
   });
 
   it('should save to localStorage when voter is set', async () => {
     spyOn(localStorage, 'setItem');
-    const voter = await service.createVoter('Nick', 'dev').toPromise();
+    const voter = await service.createVoter('Nick', 'dev', sessionId).toPromise();
     expect(localStorage.setItem).toHaveBeenCalledWith(`voter_${sessionId}`, JSON.stringify(voter));
   });
 

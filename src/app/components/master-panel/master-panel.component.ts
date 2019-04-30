@@ -16,7 +16,7 @@ export class MasterPanelComponent implements OnInit, OnDestroy {
   session: Session;
   sessionId;
   allVoted = false;
-  timer: number;
+  timer: any;
 
   constructor(private storyRepoService: StoryRepoService,
               private voterRepoService: VoterRepoService,
